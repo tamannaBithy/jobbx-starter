@@ -10,8 +10,12 @@ const Sidebar = () => {
 
   const employerRoutes = [
     {
-      name: " Add Job",
+      name: "Add Job",
       route: "add-job",
+    },
+    {
+      name: "Job List",
+      route: "employer",
     },
   ];
 
