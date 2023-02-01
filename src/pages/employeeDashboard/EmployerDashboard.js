@@ -6,19 +6,21 @@ import {
 } from "../../features/job/jobApi";
 import { MdWorkOutline } from "react-icons/md";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import { RiSendPlaneFill } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
 const EmployerDashboard = () => {
   const { user } = useSelector((state) => state.auth);
   const { data } = usePostedJobByIdQuery(user?._id);
   const [closeJob] = useCloseJobMutation();
-  console.log(data);
+  // console.log(data);
 
   const handleClose = (_id) => {
     closeJob({ jobId: _id });
   };
 
   return (
-    <div className="">
+    <div className="pt-2">
       <div className="w-full rounded-lg border border-gray-200 bg-white shadow-lg">
         <div className="font-bold gap-2 h-16 text-lg p-2 rounded-t-md flex items-center bg-gradient-to-r from-[#9942a7] to-[#cca8d1] text-white">
           <MdWorkOutline size={20} />
@@ -35,6 +37,12 @@ const EmployerDashboard = () => {
                 <th className="p-2">
                   <div className="text-left font-semibold">
                     Total Applicants
+                  </div>
+                </th>
+
+                <th className="p-2">
+                  <div className="text-left font-semibold">
+                    Applicants Details
                   </div>
                 </th>
 
@@ -59,6 +67,18 @@ const EmployerDashboard = () => {
                       <div className="text-left capitalize">
                         {applicants?.length}
                       </div>
+                    </td>
+
+                    <td className="p-2 hover:text-primary">
+                      <Link
+                        to="/dashboard/candidate-card"
+                        state={{ applicants }}
+                        className="flex items-center space-x-2"
+                      >
+                        {" "}
+                        <p>Go to Details Page</p>
+                        <RiSendPlaneFill size={16} />
+                      </Link>
                     </td>
 
                     <td

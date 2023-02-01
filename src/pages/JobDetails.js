@@ -57,6 +57,7 @@ const JobDetails = () => {
     const data = {
       userId: user?._id,
       email: user?.email,
+      name: user?.firstName + " " + user?.lastName,
       jobId: _id,
     };
 
@@ -142,7 +143,7 @@ const JobDetails = () => {
             </h1>
             <div className="text-primary my-2">
               {queries?.map(({ question, email, reply, id }) => (
-                <div>
+                <div key={id}>
                   <small>{email}</small>
                   <p className="text-lg font-medium">{question}</p>
                   {reply?.map((item) => (
