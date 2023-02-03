@@ -6,7 +6,8 @@ import {
 } from "../../features/job/jobApi";
 import { MdWorkOutline } from "react-icons/md";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { RiSendPlaneFill } from "react-icons/ri";
+
+import { AiOutlineOrderedList } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 const EmployerDashboard = () => {
@@ -72,12 +73,12 @@ const EmployerDashboard = () => {
                     <td className="p-2 hover:text-primary">
                       <Link
                         to="/dashboard/candidate-card"
-                        state={{ applicants }}
+                        state={{ applicants, _id }}
                         className="flex items-center space-x-2"
                       >
                         {" "}
-                        <p>Go to Details Page</p>
-                        <RiSendPlaneFill size={16} />
+                        <AiOutlineOrderedList size={16} />
+                        <p>See Applicants List</p>
                       </Link>
                     </td>
 

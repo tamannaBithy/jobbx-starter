@@ -70,6 +70,14 @@ const jobApi = apiSlice.injectEndpoints({
         url: `/candidate/${id}`,
       }),
     }),
+    approveStatus: builder.mutation({
+      query: (data) => ({
+        method: "PATCH",
+        url: "/approve",
+        body: data,
+      }),
+      invalidatesTags: ["JobList"],
+    }),
   }),
 });
 
@@ -84,4 +92,5 @@ export const {
   usePostedJobByIdQuery,
   useCloseJobMutation,
   useGetCandidateByIdQuery,
+  useApproveStatusMutation,
 } = jobApi;

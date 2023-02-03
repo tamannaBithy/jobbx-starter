@@ -1,14 +1,21 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useApproveStatusMutation } from "../../features/job/jobApi";
 
 const CandidateCard = () => {
   const location = useLocation();
 
-  const { applicants } = location?.state || {};
+  const { applicants, _id } = location?.state || {};
+
+  const [approve] = useApproveStatusMutation();
+
+  const handleApprove = (id) => {
+    approve({ id, _id });
+  };
 
   return (
     <div className="grid grid-cols-3 gap-5 my-4">
-      {applicants?.map(({ name, email, id }) => (
+      {applicants?.map(({ name, email, id, status }) => (
         <div
           key={id}
           className="border border-gray-300 shadow-xl p-5 rounded-2xl text-primary "
@@ -28,6 +35,12 @@ const CandidateCard = () => {
             <Link to={`/candidate/${id}`}>
               <button className="btn">See more</button>
             </Link>
+
+            {status === "pending" && (
+              <button onClick={() => handleApprove(id)} className="btn">
+                Approve
+              </button>
+            )}
           </div>
         </div>
       ))}

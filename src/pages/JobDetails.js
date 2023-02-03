@@ -59,6 +59,7 @@ const JobDetails = () => {
       email: user?.email,
       name: user?.firstName + " " + user?.lastName,
       jobId: _id,
+      status: "pending",
     };
 
     apply(data);

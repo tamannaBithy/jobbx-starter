@@ -3,18 +3,18 @@ import { useParams } from "react-router-dom";
 import { useGetCandidateByIdQuery } from "../../features/job/jobApi";
 import profileCoverImg from "../../assets/profileCoverImg.jpg";
 import manualRegUserImg from "../../assets/manualRegUserImg.png";
+import { TbMessage2 } from "react-icons/tb";
+import { TbGenderFemme } from "react-icons/tb";
 
 const CandidateDetails = () => {
   const { id } = useParams();
 
   const { data } = useGetCandidateByIdQuery(id);
-  console.log(data);
 
   const {
     firstName,
     lastName,
     email,
-    role,
     gender,
     address,
     city,
@@ -23,7 +23,7 @@ const CandidateDetails = () => {
   } = data?.data || {};
 
   return (
-    <div class="py-20 flex flex-wrap items-center justify-center">
+    <div class="py-32 flex flex-wrap items-center justify-center">
       <div class="container lg:w-2/6 xl:w-2/7 sm:w-full md:w-2/3  m-4 md:m-0  bg-white  shadow-lg    transform   duration-200 easy-in-out">
         <div class="h-32 overflow-hidden">
           <img class="w-full" src={profileCoverImg} alt="" />
@@ -48,12 +48,14 @@ const CandidateDetails = () => {
           </div>
           <hr class="mt-6" />
           <div class="flex  bg-gray-50 ">
-            <div class="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer">
+            <div class="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer flex items-center space-x-1 justify-center">
+              <TbGenderFemme size={20} />
               <p class="font-semibold">{gender}</p>
             </div>
             <div class="border"></div>
-            <div class="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer">
-              <p class="font-semibold">{role}</p>
+            <div class="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer flex items-center space-x-1 justify-center">
+              <p class="font-semibold">Message</p>
+              <TbMessage2 size={20} />
             </div>
           </div>
         </div>
