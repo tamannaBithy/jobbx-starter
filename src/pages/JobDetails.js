@@ -4,6 +4,7 @@ import { BsArrowRightShort, BsArrowReturnRight } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   useApplyJobMutation,
+  useGetAppliedJobsQuery,
   useJobByIdQuery,
   useQuestionMutation,
   useReplyMutation,
@@ -12,6 +13,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import moment from "moment";
 
 const JobDetails = () => {
   const [reply, setReply] = useState("");
@@ -42,6 +44,10 @@ const JobDetails = () => {
   const [apply] = useApplyJobMutation();
   const [sendQuestion] = useQuestionMutation();
   const [sendReply] = useReplyMutation();
+  const { data: appliedInfo } = useGetAppliedJobsQuery(user?.email);
+  const filteredData = appliedInfo?.data?.filter((item) => item._id === _id);
+
+  const today = moment(new Date()).format("MMMM Do YYYY");
 
   const handleApply = () => {
     if (user?.role === "employer") {
@@ -54,12 +60,18 @@ const JobDetails = () => {
       return;
     }
 
+    if (filteredData?.length > 0) {
+      toast.error("you have already applied for this job");
+      return;
+    }
+
     const data = {
       userId: user?._id,
       email: user?.email,
       name: user?.firstName + " " + user?.lastName,
       jobId: _id,
       status: "pending",
+      appliedDate: today,
     };
 
     apply(data);

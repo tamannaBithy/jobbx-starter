@@ -78,6 +78,13 @@ const jobApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["JobList"],
     }),
+
+    getApprovedJob: builder.query({
+      query: (data) => ({
+        url: "/approved-jobs",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -93,4 +100,5 @@ export const {
   useCloseJobMutation,
   useGetCandidateByIdQuery,
   useApproveStatusMutation,
+  useGetApprovedJobQuery,
 } = jobApi;
