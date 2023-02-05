@@ -80,9 +80,14 @@ const jobApi = apiSlice.injectEndpoints({
     }),
 
     getApprovedJob: builder.query({
-      query: (data) => ({
-        url: "/approved-jobs",
-        body: data,
+      query: ({ email, status }) => ({
+        url: `/approved-jobs?email=${email}&status=${status}`,
+      }),
+    }),
+
+    getJobByDate: builder.query({
+      query: ({ email, appliedDate }) => ({
+        url: `/searchByDate?email=${email}&appliedDate=${appliedDate}`,
       }),
     }),
   }),
@@ -101,4 +106,5 @@ export const {
   useGetCandidateByIdQuery,
   useApproveStatusMutation,
   useGetApprovedJobQuery,
+  useGetJobByDateQuery,
 } = jobApi;
