@@ -53,7 +53,7 @@ const AppliedJobs = () => {
     if (filterByDateJobs?.data?.length > 0) {
       content = filterByDateJobs?.data?.map((job) => <JobCard jobData={job} />);
     } else {
-      content = <h1>No jobs found on that day.</h1>;
+      content = <h1>No jobs found on that day. Search again.</h1>;
     }
   }
 
