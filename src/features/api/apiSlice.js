@@ -7,7 +7,7 @@ export const apiSlice = createApi({
     baseUrl: "https://slim-touch-production.up.railway.app",
   }),
   // baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
-  tagTypes: ["Jobs", "Job", "JobList"],
+  tagTypes: ["Jobs", "Job", "JobList", "messages", "conversations"],
   endpoints: (builder) => ({}),
 });
 

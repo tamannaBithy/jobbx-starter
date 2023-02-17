@@ -14,12 +14,13 @@ import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import moment from "moment";
+import { useCreateMessageMutation } from "../features/chat/chatApi";
 
 const JobDetails = () => {
   const [reply, setReply] = useState("");
   const { id } = useParams();
   const { data, isLoading, isError } = useJobByIdQuery(id, {
-    pollingInterval: 1000,
+    // pollingInterval: 1000,
   });
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -39,13 +40,17 @@ const JobDetails = () => {
     overview,
     queries,
     _id,
+    postBy,
   } = data?.data || {};
+
+  console.log(data);
 
   const [apply] = useApplyJobMutation();
   const [sendQuestion] = useQuestionMutation();
   const [sendReply] = useReplyMutation();
   const { data: appliedInfo } = useGetAppliedJobsQuery(user?.email);
   const filteredData = appliedInfo?.data?.filter((item) => item._id === _id);
+  const [createMessage] = useCreateMessageMutation();
 
   const today = moment(new Date()).format("MMMM Do YYYY");
 
@@ -75,6 +80,13 @@ const JobDetails = () => {
     };
 
     apply(data);
+
+    const members = [
+      { name: user?.firstName + " " + user?.lastName, email: user?.email },
+      { name: postBy?.name, email: postBy?.email },
+    ];
+
+    createMessage(members);
   };
 
   const handleQuestion = (data) => {
@@ -97,24 +109,24 @@ const JobDetails = () => {
   };
 
   return (
-    <div className="pt-14 grid grid-cols-12 gap-5">
+    <div className="grid grid-cols-12 gap-5 pt-14">
       <div className="col-span-9 mb-10">
-        <div className="h-80 rounded-xl overflow-hidden">
+        <div className="h-80 overflow-hidden rounded-xl">
           <img className="h-full w-full object-cover" src={meeting} alt="" />
         </div>
         <div className="space-y-5">
-          <div className="flex justify-between items-center mt-5">
+          <div className="mt-5 flex items-center justify-between">
             <h1 className="text-xl font-semibold text-primary">{position}</h1>
             <button onClick={handleApply} className="btn">
               Apply
             </button>
           </div>
           <div>
-            <h1 className="text-primary text-lg font-medium mb-3">Overview</h1>
+            <h1 className="mb-3 text-lg font-medium text-primary">Overview</h1>
             <p>{overview}</p>
           </div>
           <div>
-            <h1 className="text-primary text-lg font-medium mb-3">Skills</h1>
+            <h1 className="mb-3 text-lg font-medium text-primary">Skills</h1>
             <ul>
               {skills?.map((skill) => (
                 <li className="flex items-center">
@@ -124,7 +136,7 @@ const JobDetails = () => {
             </ul>
           </div>
           <div>
-            <h1 className="text-primary text-lg font-medium mb-3">
+            <h1 className="mb-3 text-lg font-medium text-primary">
               Requirements
             </h1>
             <ul>
@@ -136,7 +148,7 @@ const JobDetails = () => {
             </ul>
           </div>
           <div>
-            <h1 className="text-primary text-lg font-medium mb-3">
+            <h1 className="mb-3 text-lg font-medium text-primary">
               Responsibilities
             </h1>
             <ul>
@@ -151,22 +163,22 @@ const JobDetails = () => {
         <hr className="my-5" />
         <div>
           <div>
-            <h1 className="text-xl font-semibold text-primary mb-5">
+            <h1 className="mb-5 text-xl font-semibold text-primary">
               General Q&A
             </h1>
-            <div className="text-primary my-2">
+            <div className="my-2 text-primary">
               {queries?.map(({ question, email, reply, id }) => (
                 <div key={id}>
                   <small>{email}</small>
                   <p className="text-lg font-medium">{question}</p>
                   {reply?.map((item) => (
-                    <p className="flex items-center gap-2 relative left-5">
+                    <p className="relative left-5 flex items-center gap-2">
                       <BsArrowReturnRight /> {item}
                     </p>
                   ))}
 
                   {user?.role === "employer" && (
-                    <div className="flex gap-3 my-5">
+                    <div className="my-5 flex gap-3">
                       <input
                         placeholder="Reply"
                         type="text"
@@ -174,7 +186,7 @@ const JobDetails = () => {
                         onBlur={(e) => setReply(e.target.value)}
                       />
                       <button
-                        className="shrink-0 h-14 w-14 bg-primary/10 border border-primary hover:bg-primary rounded-full transition-all  grid place-items-center text-primary hover:text-white"
+                        className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-primary bg-primary/10  text-primary transition-all hover:bg-primary hover:text-white"
                         type="button"
                         onClick={() => handleReply(id)}
                       >
@@ -188,7 +200,7 @@ const JobDetails = () => {
 
             {user?.role === "candidate" && (
               <form onSubmit={handleSubmit(handleQuestion)}>
-                <div className="flex gap-3 my-5">
+                <div className="my-5 flex gap-3">
                   <input
                     placeholder="Ask a question..."
                     type="text"
@@ -196,7 +208,7 @@ const JobDetails = () => {
                     {...register("question")}
                   />
                   <button
-                    className="shrink-0 h-14 w-14 bg-primary/10 border border-primary hover:bg-primary rounded-full transition-all  grid place-items-center text-primary hover:text-white"
+                    className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-primary bg-primary/10  text-primary transition-all hover:bg-primary hover:text-white"
                     type="submit"
                   >
                     <BsArrowRightShort size={30} />
@@ -208,51 +220,51 @@ const JobDetails = () => {
         </div>
       </div>
       <div className="col-span-3">
-        <div className="rounded-xl bg-primary/10 p-5 text-primary space-y-5">
+        <div className="space-y-5 rounded-xl bg-primary/10 p-5 text-primary">
           <div>
             <p>Experience</p>
-            <h1 className="font-semibold text-lg">{experience}</h1>
+            <h1 className="text-lg font-semibold">{experience}</h1>
           </div>
           <div>
             <p>Work Level</p>
-            <h1 className="font-semibold text-lg">{workLevel}</h1>
+            <h1 className="text-lg font-semibold">{workLevel}</h1>
           </div>
           <div>
             <p>Employment Type</p>
-            <h1 className="font-semibold text-lg">{employmentType}</h1>
+            <h1 className="text-lg font-semibold">{employmentType}</h1>
           </div>
           <div>
             <p>Salary Range</p>
-            <h1 className="font-semibold text-lg">{salaryRange}</h1>
+            <h1 className="text-lg font-semibold">{salaryRange}</h1>
           </div>
           <div>
             <p>Location</p>
-            <h1 className="font-semibold text-lg">{location}</h1>
+            <h1 className="text-lg font-semibold">{location}</h1>
           </div>
         </div>
-        <div className="mt-5 rounded-xl bg-primary/10 p-5 text-primary space-y-5">
+        <div className="mt-5 space-y-5 rounded-xl bg-primary/10 p-5 text-primary">
           <div>
-            <h1 className="font-semibold text-lg">{companyName}</h1>
+            <h1 className="text-lg font-semibold">{companyName}</h1>
           </div>
           <div>
             <p>Company Size</p>
-            <h1 className="font-semibold text-lg">Above 100</h1>
+            <h1 className="text-lg font-semibold">Above 100</h1>
           </div>
           <div>
             <p>Founded</p>
-            <h1 className="font-semibold text-lg">2001</h1>
+            <h1 className="text-lg font-semibold">2001</h1>
           </div>
           <div>
             <p>Email</p>
-            <h1 className="font-semibold text-lg">company.email@name.com</h1>
+            <h1 className="text-lg font-semibold">company.email@name.com</h1>
           </div>
           <div>
             <p>Company Location</p>
-            <h1 className="font-semibold text-lg">Los Angeles</h1>
+            <h1 className="text-lg font-semibold">Los Angeles</h1>
           </div>
           <div>
             <p>Website</p>
-            <a className="font-semibold text-lg" href="#">
+            <a className="text-lg font-semibold" href="#">
               https://website.com
             </a>
           </div>

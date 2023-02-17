@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import JobCard from "../../components/reusable/JobCard";
 import Loading from "../../components/reusable/Loading";
@@ -25,7 +25,8 @@ const AppliedJobs = () => {
     appliedDate: formatStartDate,
   });
 
-  const activeClass = "text-white bg-purple-500 border-white";
+  const activeClass =
+    "px-6 py-3 border border-primary  rounded-full bg-primary text-white";
 
   if (isLoading) {
     return <Loading />;
@@ -59,30 +60,31 @@ const AppliedJobs = () => {
 
   return (
     <div>
-      <h1 className="text-xl py-5">Applied jobs</h1>
-      <div className="mb-10 flex justify-end">
-        <div className="flex flex-col gap-1 w-full lg:w-1/3">
-          <label>Applied Date:</label>
-          <DatePicker
-            className="input-bordered bg-white input border   w-full lg:w-auto border-l-4 border-primary focus:border-primary focus:ring-primary border-l-purple-500  max-w-xs text-black flex"
-            placeholderText={moment(new Date()).format("DD/MM/yy")}
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            selectsStart
-            startDate={startDate}
-            dateFormat="dd/MM/yy"
-          />
-        </div>
+      <h1 className=" py-5 text-xl">Applied jobs</h1>
 
-        <div>
-          <button
-            className={`border px-3 py-2 rounded-full font-semibold ${
-              status ? activeClass : null
-            } `}
-            onClick={() => handleClick("approved")}
-          >
-            Approved
-          </button>
+      <div>
+        <div className="mb-10 flex  items-center justify-end">
+          <div>
+            <label>Applied Date:</label>
+            <div className="items-center gap-10 space-y-2 md:flex md:space-y-0">
+              <DatePicker
+                className="input-bordered input flex w-full   max-w-xs border border-l-4 border-primary border-l-purple-500 bg-white text-black  focus:border-primary focus:ring-primary lg:w-auto"
+                placeholderText={moment(new Date()).format("DD/MM/yy")}
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                selectsStart
+                startDate={startDate}
+                dateFormat="dd/MM/yy"
+              />
+
+              <button
+                className={` ${status ? activeClass : "btn"} `}
+                onClick={() => handleClick("approved")}
+              >
+                Approved
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
